@@ -182,7 +182,7 @@ def _impl(repository_ctx):
             fail("unexpected x86 assembler at the top level")
 
         # Now check for platform specific directories.
-        for platform in ['arm', 'x86']:
+        for platform in ['arm', 'x86', 'aarch64']:
             makefile_data = _get_sources(
                 repository_ctx, "lib{}/{}/Makefile".format(module, platform),
                 config_dict, prefix)
