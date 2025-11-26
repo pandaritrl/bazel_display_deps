@@ -14,6 +14,8 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
+load("@bazel_skylib//lib:selects.bzl", "selects")
+
 package(default_visibility = ["//visibility:public"])
 
 config_setting(
@@ -45,20 +47,50 @@ config_setting(
 )
 
 config_setting(
+    name = "aarch64_constraint",
+    constraint_values = [
+        "@platforms//cpu:aarch64",
+    ],
+)
+
+# Alias that matches either cpu=aarch64 or platform constraint for aarch64
+alias(
+    name = "aarch64_all",
+    actual = select({
+        ":aarch64" : ":aarch64",
+        ":aarch64_constraint" : ":aarch64_constraint",
+        "//conditions:default" : ":aarch64",
+    }),
+)
+
+config_setting(
     name = "armeabihf",
     values = {
         "cpu" : "armeabihf",
     },
 )
 
+# X86_64 conditions
+config_setting(
+    name = "x86_64_cpu_only",
+    constraint_values = [
+        "@platforms//cpu:x86_64",
+    ],
+)
+
+selects.config_setting_group(
+    name = "x86_64_group",
+    match_any = [
+        ":cpu_k8",
+        ":cpu_local", 
+        ":cpu_darwin_x86_64",
+        ":x86_64_cpu_only",
+    ],
+)
+
 alias(
     name = "x86_64",
-    actual = select({
-        ":cpu_local" : ":cpu_local",
-        ":cpu_k8" : ":cpu_k8",
-        ":cpu_darwin_x86_64" : ":cpu_darwin_x86_64",
-        "//conditions:default" : ":cpu_local",
-    }),
+    actual = ":x86_64_group",
 )
 
 alias(

@@ -126,8 +126,11 @@ cc_binary(
     name = "libavutil.so",
     linkshared = True,
     srcs = @AVUTIL_SOURCES@ +select({
-        "@com_github_mjbots_bazel_deps//conditions:arm" : @AVUTIL_ARM_SOURCES@,
-        "@com_github_mjbots_bazel_deps//conditions:x86_64" : (@AVUTIL_X86_SOURCES@ + [":avutil_x86asm"]),
+        "@com_github_mjbots_bazel_deps//conditions:aarch64_constraint" : @AVUTIL_AARCH64_SOURCES@,
+        "@com_github_mjbots_bazel_deps//conditions:aarch64" : [],
+        "@com_github_mjbots_bazel_deps//conditions:arm" : [],
+        "@com_github_mjbots_bazel_deps//conditions:x86_64_cpu_only" : (@AVUTIL_X86_SOURCES@ + [":avutil_x86asm"]),
+        "//conditions:default" : (@AVUTIL_X86_SOURCES@ + [":avutil_x86asm"]),
     }),
     copts = COMMON_COPTS,
     linkopts = BIN_LINKOPTS + [
@@ -163,8 +166,11 @@ cc_binary(
     name = "libswscale.so",
     linkshared = True,
     srcs = @SWSCALE_SOURCES@ + select({
-        "@com_github_mjbots_bazel_deps//conditions:arm" : @SWSCALE_ARM_SOURCES@,
-        "@com_github_mjbots_bazel_deps//conditions:x86_64" : (@SWSCALE_X86_SOURCES@ + [":swscale_x86asm"]),
+        "@com_github_mjbots_bazel_deps//conditions:aarch64_constraint" : @SWSCALE_AARCH64_SOURCES@,
+        "@com_github_mjbots_bazel_deps//conditions:aarch64" : [],
+        "@com_github_mjbots_bazel_deps//conditions:arm" : [],
+        "@com_github_mjbots_bazel_deps//conditions:x86_64_cpu_only" : (@SWSCALE_X86_SOURCES@ + [":swscale_x86asm"]),
+        "//conditions:default" : (@SWSCALE_X86_SOURCES@ + [":swscale_x86asm"]),
     }),
     copts = COMMON_COPTS,
     deps = [
@@ -189,8 +195,11 @@ cc_binary(
     name = "libswresample.so",
     linkshared = True,
     srcs = @SWRESAMPLE_SOURCES@ + select({
-        "@com_github_mjbots_bazel_deps//conditions:arm" : @SWRESAMPLE_ARM_SOURCES@,
-        "@com_github_mjbots_bazel_deps//conditions:x86_64" : (@SWRESAMPLE_X86_SOURCES@ + [":swresample_x86asm"]),
+        "@com_github_mjbots_bazel_deps//conditions:aarch64_constraint" : @SWRESAMPLE_AARCH64_SOURCES@,
+        "@com_github_mjbots_bazel_deps//conditions:aarch64" : [],
+        "@com_github_mjbots_bazel_deps//conditions:arm" : [],
+        "@com_github_mjbots_bazel_deps//conditions:x86_64_cpu_only" : (@SWRESAMPLE_X86_SOURCES@ + [":swresample_x86asm"]),
+        "//conditions:default" : (@SWRESAMPLE_X86_SOURCES@ + [":swresample_x86asm"]),
     }),
     copts = COMMON_COPTS,
     deps = [
@@ -220,8 +229,11 @@ cc_binary(
         "pthread_slice.c",
         "pthread_frame.c",
     ]] + select({
-        "@com_github_mjbots_bazel_deps//conditions:arm" : @AVCODEC_ARM_SOURCES@,
-        "@com_github_mjbots_bazel_deps//conditions:x86_64" : (@AVCODEC_X86_SOURCES@ + [":avcodec_x86asm"]),
+        "@com_github_mjbots_bazel_deps//conditions:aarch64_constraint" : @AVCODEC_AARCH64_SOURCES@,
+        "@com_github_mjbots_bazel_deps//conditions:aarch64" : [],
+        "@com_github_mjbots_bazel_deps//conditions:arm" : [],
+        "@com_github_mjbots_bazel_deps//conditions:x86_64_cpu_only" : (@AVCODEC_X86_SOURCES@ + [":avcodec_x86asm"]),
+        "//conditions:default" : (@AVCODEC_X86_SOURCES@ + [":avcodec_x86asm"]),
     }),
     copts = COMMON_COPTS + [
         "-Iexternal/ffmpeg/libavcodec/",
@@ -250,8 +262,11 @@ cc_binary(
     name = "libavformat.so",
     linkshared = True,
     srcs = @AVFORMAT_SOURCES@ + select({
-        "@com_github_mjbots_bazel_deps//conditions:arm" : @AVFORMAT_ARM_SOURCES@,
-        "@com_github_mjbots_bazel_deps//conditions:x86_64" : @AVFORMAT_X86_SOURCES@,
+        "@com_github_mjbots_bazel_deps//conditions:aarch64_constraint" : @AVFORMAT_AARCH64_SOURCES@,
+        "@com_github_mjbots_bazel_deps//conditions:aarch64" : [],
+        "@com_github_mjbots_bazel_deps//conditions:arm" : [],
+        "@com_github_mjbots_bazel_deps//conditions:x86_64_cpu_only" : @AVFORMAT_X86_SOURCES@,
+        "//conditions:default" : @AVFORMAT_X86_SOURCES@,
     }),
     copts = COMMON_COPTS + [
         "-Iexternal/ffmpeg/libavcodec",
@@ -283,8 +298,11 @@ cc_binary(
     srcs = @AVFILTER_SOURCES@ + ["libavfilter/" + x for x in [
         "pthread.c",
     ]] + select({
-        "@com_github_mjbots_bazel_deps//conditions:arm" : @AVFILTER_ARM_SOURCES@,
-        "@com_github_mjbots_bazel_deps//conditions:x86_64" : (@AVFILTER_X86_SOURCES@ + [":avfilter_x86asm"]),
+        "@com_github_mjbots_bazel_deps//conditions:aarch64_constraint" : @AVFILTER_AARCH64_SOURCES@,
+        "@com_github_mjbots_bazel_deps//conditions:aarch64" : [],
+        "@com_github_mjbots_bazel_deps//conditions:arm" : [],
+        "@com_github_mjbots_bazel_deps//conditions:x86_64_cpu_only" : (@AVFILTER_X86_SOURCES@ + [":avfilter_x86asm"]),
+        "//conditions:default" : (@AVFILTER_X86_SOURCES@ + [":avfilter_x86asm"]),
     }),
     copts = COMMON_COPTS + [
         "-Iexternal/ffmpeg/libavfilter",
@@ -331,7 +349,7 @@ cc_binary(
 [nasm_objects(
     name = module + "_x86asm",
     srcs = select({
-        "@com_github_mjbots_bazel_deps//conditions:x86_64" : asm_files,
+        "@com_github_mjbots_bazel_deps//conditions:x86_64_cpu_only" : asm_files,
         "//conditions:default" : [],
     }),
     textual_hdrs = [
@@ -408,6 +426,14 @@ template_file(
     name = "private/config.h",
     src = "private/config.h.in",
     substitution_list = select({
+        "@com_github_mjbots_bazel_deps//conditions:aarch64_constraint" : ([
+            "#define ARCH_AARCH64 0=#define ARCH_AARCH64 1",
+            # Don't set ARCH_ARM for aarch64 - that's for 32-bit ARM only
+        ]),
+        "@com_github_mjbots_bazel_deps//conditions:aarch64" : ([
+            "#define ARCH_AARCH64 0=#define ARCH_AARCH64 1",
+            # Don't set ARCH_ARM for aarch64 - that's for 32-bit ARM only  
+        ]),
         "@com_github_mjbots_bazel_deps//conditions:arm" : ([
             "#define ARCH_ARM 0=#define ARCH_ARM 1",
         ] + [
@@ -417,7 +443,7 @@ template_file(
             "#define HAVE_{x}_EXTERNAL 0=#define HAVE_{x}_EXTERNAL 1".format(x=x)
             for x in ARM_OPTS
         ]),
-        "@com_github_mjbots_bazel_deps//conditions:x86_64" : ([
+        "@com_github_mjbots_bazel_deps//conditions:x86_64_cpu_only" : ([
             "#define ARCH_X86 0=#define ARCH_X86 1",
             "#define ARCH_X86_64 0=#define ARCH_X86_64 1",
             "#define HAVE_X86ASM 0=#define HAVE_X86ASM 1",
