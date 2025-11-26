@@ -601,8 +601,10 @@ cc_binary(
         "private/config.h",
     ],
     copts = COPTS,
-    linkopts = ["-lxcb"],
-    deps = [":headers"],
+    deps = [
+        ":headers",
+        "@libxcb//:libxcb",
+    ],
     linkshared = True,
 )
 
@@ -670,7 +672,11 @@ cc_binary(
 cc_library(
     name = "libx11",
     srcs = [":libx11_bin.so"],
-    deps = [":headers"],
+    deps = [
+        ":headers",
+        ":libi18n",
+        ":xim",
+    ],
 )
 
 cc_library(
