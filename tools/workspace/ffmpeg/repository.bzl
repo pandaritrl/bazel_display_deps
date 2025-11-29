@@ -296,5 +296,7 @@ def ffmpeg_repository(name):
         patches = [
             # From: https://patchwork.ffmpeg.org/patch/8253/
             Label("//tools/workspace/ffmpeg:using_dn_directive.diff"),
+            # Set CUVID ulMaxDisplayDelay to 1 for low latency
+            Label("//tools/workspace/ffmpeg:cuvid_low_latency.diff"),
         ],
     )

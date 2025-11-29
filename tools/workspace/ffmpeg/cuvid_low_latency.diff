@@ -1,0 +1,11 @@
+--- libavcodec/cuvid.c.orig	2018-02-11 16:29:04.000000000 -0800
++++ libavcodec/cuvid.c	2025-11-28 19:11:18.574903106 -0800
+@@ -977,7 +977,7 @@
+     }
+ 
+     ctx->cuparseinfo.ulMaxNumDecodeSurfaces = ctx->nb_surfaces;
+-    ctx->cuparseinfo.ulMaxDisplayDelay = 4;
++    ctx->cuparseinfo.ulMaxDisplayDelay = 1;
+     ctx->cuparseinfo.pUserData = avctx;
+     ctx->cuparseinfo.pfnSequenceCallback = cuvid_handle_video_sequence;
+     ctx->cuparseinfo.pfnDecodePicture = cuvid_handle_picture_decode;
