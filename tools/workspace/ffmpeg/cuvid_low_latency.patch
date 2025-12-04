@@ -1,0 +1,26 @@
+--- libavcodec/cuvid.c.orig	2025-12-03 00:00:00.000000000 +0000
++++ libavcodec/cuvid.c	2025-12-03 00:00:00.000000000 +0000
+@@ -428,11 +428,13 @@
+         cupkt.payload = avpkt->data;
+ 
+         if (avpkt->pts != AV_NOPTS_VALUE) {
+-            cupkt.flags = CUVID_PKT_TIMESTAMP;
++            cupkt.flags = CUVID_PKT_TIMESTAMP | CUVID_PKT_ENDOFPICTURE;
+             if (avctx->pkt_timebase.num && avctx->pkt_timebase.den)
+                 cupkt.timestamp = av_rescale_q(avpkt->pts, avctx->pkt_timebase, (AVRational){1, 10000000});
+             else
+                 cupkt.timestamp = avpkt->pts;
++        } else {
++            cupkt.flags = CUVID_PKT_ENDOFPICTURE;
+         }
+     } else {
+         cupkt.flags = CUVID_PKT_ENDOFSTREAM;
+@@ -977,7 +979,7 @@
+     }
+ 
+     ctx->cuparseinfo.ulMaxNumDecodeSurfaces = ctx->nb_surfaces;
+-    ctx->cuparseinfo.ulMaxDisplayDelay = 4;
++    ctx->cuparseinfo.ulMaxDisplayDelay = 0;
+     ctx->cuparseinfo.pUserData = avctx;
+     ctx->cuparseinfo.pfnSequenceCallback = cuvid_handle_video_sequence;
+     ctx->cuparseinfo.pfnDecodePicture = cuvid_handle_picture_decode;

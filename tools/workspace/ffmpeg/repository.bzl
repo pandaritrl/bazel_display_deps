@@ -296,5 +296,8 @@ def ffmpeg_repository(name):
         patches = [
             # From: https://patchwork.ffmpeg.org/patch/8253/
             Label("//tools/workspace/ffmpeg:using_dn_directive.diff"),
+            # CUVID low latency patch: reduces display delay buffer and adds ENDOFPICTURE flag
+            # From: https://forums.developer.nvidia.com/t/video-decoder-frames-latency-between-first-frame-inserted-and-first-frame-extracted/46868/5
+            Label("//tools/workspace/ffmpeg:cuvid_low_latency.patch"),
         ],
     )
